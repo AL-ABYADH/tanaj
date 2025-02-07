@@ -24,10 +24,10 @@ class Board {
     pos7.adjacentPositions = [pos4, pos6, pos8];
     pos8.adjacentPositions = [pos4, pos5, pos7];
 
-    positions = [
-      [pos0, pos1, pos2],
-      [pos3, pos4, pos5],
-      [pos6, pos7, pos8]
-    ];
+    positions = List<List<Position>>.unmodifiable([
+      List<Position>.unmodifiable([pos0, pos1, pos2]),
+      List<Position>.unmodifiable([pos3, pos4, pos5]),
+      List<Position>.unmodifiable([pos6, pos7, pos8]),
+    ]);
   }
 }
