@@ -1,34 +1,43 @@
+import 'dart:math';
+
 import '../exceptions/invalid_move_exception.dart';
+import '../exceptions/move_not_found_exception.dart';
 import 'board.dart';
 import 'player.dart';
 import 'position.dart';
 import 'stone.dart';
 
 class Game {
-  late final Player human;
-  late final Player computer;
+  final Player human;
+  final Player computer;
   final Board board;
-  late final bool playerStarts;
+  final bool playerStarts;
 
-  int moves = 0;
+  int _moves = 0;
 
-  Game({required this.board, required this.playerStarts}) {
-    final boardPositions = board.positions;
-    computer = Player(List<Stone>.unmodifiable([
-      Stone(boardPositions[0][0]),
-      Stone(boardPositions[0][1]),
-      Stone(boardPositions[0][2])
-    ]));
-    human = Player(List<Stone>.unmodifiable([
-      Stone(boardPositions[2][0]),
-      Stone(boardPositions[2][1]),
-      Stone(boardPositions[2][2])
-    ]));
-  }
+  Game({
+    required this.board,
+    required this.playerStarts,
+  })  : human = Player(List<Stone>.unmodifiable([
+          Stone(board.positions[2][0]),
+          Stone(board.positions[2][1]),
+          Stone(board.positions[2][2]),
+        ])),
+        computer = Player(List<Stone>.unmodifiable([
+          Stone(board.positions[0][0]),
+          Stone(board.positions[0][1]),
+          Stone(board.positions[0][2]),
+        ]));
+
+  Game copyWith({bool? playerStarts, int? maxSearchDepth}) => Game(
+        board: board,
+        playerStarts: playerStarts ?? this.playerStarts,
+      ).._moves = _moves;
 
   void movePlayerStone(Stone stone, Position position) {
-    isEmptyPosition(position)
-        ? {whoseTurn.moveStone(stone, position), moves++}
+    stone.position.adjacentPositions.contains(position) &&
+            isEmptyPosition(position)
+        ? {whoseTurn.moveStone(stone, position), _moves++}
         : throw InvalidMoveException();
   }
 
@@ -41,13 +50,12 @@ class Game {
       !computer.stones.map((stone) => stone.position).contains(position);
 
   Player get whoseTurn =>
-      (moves.isEven && playerStarts) || (moves.isOdd && !playerStarts)
+      (_moves.isEven && playerStarts) || (_moves.isOdd && !playerStarts)
           ? human
           : computer;
 
   bool playerWins(Player player) {
-    final stones = player.stones;
-    final stonePositions = stones.map((stone) => stone.position);
+    final stonePositions = player.stones.map((stone) => stone.position);
     final positions = board.positions;
 
     final row1 = positions[0];
@@ -74,5 +82,75 @@ class Game {
 
   bool isGameOver() {
     return playerWins(human) || playerWins(computer);
+  }
+
+  void computerPlay() {
+    if (isGameOver()) return;
+
+    final gameState = copyWith();
+
+    final Map<Stone, Position>? bestMove = findBestMove(gameState);
+
+    if (bestMove == null) throw MoveNotFoundException();
+
+    movePlayerStone(bestMove.keys.first, bestMove.values.first);
+  }
+
+  Map<Stone, Position>? findBestMove(Game gameState) {
+    int bestScore = -1;
+    for (var stone in whoseTurn.stones) {
+      for (var position in stone.position.adjacentPositions) {
+        if (isEmptyPosition(position)) {
+          final prevPosition = stone.position.copyWith();
+          gameState.movePlayerStone(stone, position);
+          final score = minimax(gameState, false);
+          gameState.movePlayerStone(stone, prevPosition);
+          if (score > bestScore) {
+            bestScore = score;
+            return {stone: position};
+          }
+        }
+      }
+    }
+    return null;
+  }
+
+  int minimax(Game gameState, bool maximize) {
+    if (playerWins(computer)) return 1;
+    if (playerWins(human)) return -1;
+
+    if (maximize) {
+      return maximizer(gameState);
+    } else {
+      return minimizer(gameState);
+    }
+  }
+
+  int maximizer(Game gameState) {
+    int bestScore = -1;
+    for (var stone in whoseTurn.stones) {
+      for (var position in stone.position.adjacentPositions) {
+        final prevPosition = stone.position.copyWith();
+        gameState.movePlayerStone(stone, position);
+        final score = minimax(gameState, false);
+        gameState.movePlayerStone(stone, prevPosition);
+        bestScore = max(bestScore, score);
+      }
+    }
+    return bestScore;
+  }
+
+  int minimizer(Game gameState) {
+    int bestScore = 1;
+    for (var stone in whoseTurn.stones) {
+      for (var position in stone.position.adjacentPositions) {
+        final prevPosition = stone.position.copyWith();
+        gameState.movePlayerStone(stone, position);
+        final score = minimax(gameState, true);
+        gameState.movePlayerStone(stone, prevPosition);
+        bestScore = min(bestScore, score);
+      }
+    }
+    return bestScore;
   }
 }

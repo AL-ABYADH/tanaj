@@ -1,0 +1,1 @@
+class MoveNotFoundException implements Exception {}
