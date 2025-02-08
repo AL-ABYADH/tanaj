@@ -58,9 +58,29 @@ class _GameScreenState extends State<GameScreen> {
       body: Center(
         child: SizedBox(
           width: double.infinity,
-          child: BoardWidget(
-            game: game,
-            moveStone: _moveStone,
+          child: Column(
+            children: [
+              SizedBox(
+                  height: 50,
+                  child: game.playerWins(game.human)
+                      ? const Text("You win!",
+                          style: TextStyle(
+                            fontSize: 40,
+                          ))
+                      : game.playerWins(game.computer)
+                          ? const Text("You lose!",
+                              style: TextStyle(
+                                fontSize: 40,
+                              ))
+                          : null),
+              const SizedBox(
+                height: 20,
+              ),
+              BoardWidget(
+                game: game,
+                moveStone: _moveStone,
+              ),
+            ],
           ),
         ),
       ),
