@@ -1,10 +1,11 @@
-import 'position.dart';
 import 'stone.dart';
 
 class Player {
+  final String name;
   final List<Stone> stones;
 
-  Player(this.stones);
+  Player(this.name, this.stones);
 
-  void moveStone(Stone stone, Position position) => stone.move(position);
+  @override
+  String toString() => 'Player(name: $name, stones: $stones)';
 }

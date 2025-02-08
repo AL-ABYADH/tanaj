@@ -4,15 +4,15 @@ class Board {
   late final List<List<Position>> positions;
 
   Board() {
-    final pos0 = Position([]);
-    final pos1 = Position([]);
-    final pos2 = Position([]);
-    final pos3 = Position([]);
-    final pos4 = Position([]);
-    final pos5 = Position([]);
-    final pos6 = Position([]);
-    final pos7 = Position([]);
-    final pos8 = Position([]);
+    final pos0 = Position([], 0, 0);
+    final pos1 = Position([], 0, 1);
+    final pos2 = Position([], 0, 2);
+    final pos3 = Position([], 1, 0);
+    final pos4 = Position([], 1, 1);
+    final pos5 = Position([], 1, 2);
+    final pos6 = Position([], 2, 0);
+    final pos7 = Position([], 2, 1);
+    final pos8 = Position([], 2, 2);
 
     pos0.adjacentPositions = [pos1, pos3, pos4];
     pos1.adjacentPositions = [pos0, pos2, pos4];
@@ -29,5 +29,16 @@ class Board {
       List<Position>.unmodifiable([pos3, pos4, pos5]),
       List<Position>.unmodifiable([pos6, pos7, pos8]),
     ]);
+  }
+
+  List<int> getPositionIndex(Position position) {
+    for (int row = 0; row < positions.length; row++) {
+      for (int col = 0; col < positions[row].length; col++) {
+        if (positions[row][col] == position) {
+          return [row, col];
+        }
+      }
+    }
+    return [-1, -1];
   }
 }
