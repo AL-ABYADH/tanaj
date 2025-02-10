@@ -37,13 +37,15 @@ class _GameScreenState extends State<GameScreen> {
               Stone(5, board.positions[0][1]),
               Stone(6, board.positions[0][2]),
             ])),
-        playerStarts: true);
+        humanStarts: false);
     game.board.positions[0][0].stone = game.computer.stones[0];
     game.board.positions[0][1].stone = game.computer.stones[1];
     game.board.positions[0][2].stone = game.computer.stones[2];
     game.board.positions[2][0].stone = game.human.stones[0];
     game.board.positions[2][1].stone = game.human.stones[1];
     game.board.positions[2][2].stone = game.human.stones[2];
+
+    if (!game.humanStarts) game.computerPlay();
   }
 
   void _moveStone(Stone stone, Position position) => setState(() {
@@ -58,29 +60,31 @@ class _GameScreenState extends State<GameScreen> {
       body: Center(
         child: SizedBox(
           width: double.infinity,
-          child: Column(
-            children: [
-              SizedBox(
-                  height: 50,
-                  child: game.playerWins(game.human)
-                      ? const Text("You win!",
-                          style: TextStyle(
-                            fontSize: 40,
-                          ))
-                      : game.playerWins(game.computer)
-                          ? const Text("You lose!",
-                              style: TextStyle(
-                                fontSize: 40,
-                              ))
-                          : null),
-              const SizedBox(
-                height: 20,
-              ),
-              BoardWidget(
-                game: game,
-                moveStone: _moveStone,
-              ),
-            ],
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                SizedBox(
+                    height: 50,
+                    child: game.playerWins(game.human)
+                        ? const Text("You win!",
+                            style: TextStyle(
+                              fontSize: 40,
+                            ))
+                        : game.playerWins(game.computer)
+                            ? const Text("You lose!",
+                                style: TextStyle(
+                                  fontSize: 40,
+                                ))
+                            : null),
+                const SizedBox(
+                  height: 20,
+                ),
+                BoardWidget(
+                  game: game,
+                  moveStone: _moveStone,
+                ),
+              ],
+            ),
           ),
         ),
       ),

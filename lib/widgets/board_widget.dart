@@ -18,211 +18,254 @@ class BoardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
+    return Stack(
+      alignment: Alignment.center,
       children: [
-        Row(
+        SizedBox(
+            width: 410, height: 410, child: Image.asset('assets/board.png')),
+        Column(
           mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            PositionWidget(
-              isValidMove: game.isValidMove,
-              moveStone: moveStone,
-              position: game.board.positions[0][0],
-              stone: game.board.positions[0][0].stone != null
-                  ? StoneWidget(
-                      canDrag: game.whoseTurn == game.human &&
-                          game.human.stones
-                              .contains(game.board.positions[0][0].stone),
-                      stone: game.board.positions[0][0].stone!,
-                      color: game.isGameOver() &&
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                PositionWidget(
+                  isValidMove: game.isValidMove,
+                  moveStone: moveStone,
+                  position: game.board.positions[0][0],
+                  stone: game.board.positions[0][0].stone != null
+                      ? StoneWidget(
+                          canDrag: !game.isGameOver() &&
+                              game.whoseTurn == game.human &&
                               game.human.stones
-                                  .contains(game.board.positions[0][0].stone)
-                          ? Colors.green
-                          : game.human.stones
-                                  .contains(game.board.positions[0][0].stone)
-                              ? Colors.blue
-                              : Colors.red,
-                    )
-                  : null,
+                                  .contains(game.board.positions[0][0].stone),
+                          stone: game.board.positions[0][0].stone!,
+                          color: (game.playerWins(game.human) &&
+                                      game.human.stones.contains(
+                                          game.board.positions[0][0].stone)) ||
+                                  game.playerWins(game.computer) &&
+                                      game.computer.stones.contains(
+                                          game.board.positions[0][0].stone)
+                              ? Colors.green
+                              : game.human.stones.contains(
+                                      game.board.positions[0][0].stone)
+                                  ? Colors.blue
+                                  : Colors.red,
+                        )
+                      : null,
+                ),
+                PositionWidget(
+                  isValidMove: game.isValidMove,
+                  moveStone: moveStone,
+                  position: game.board.positions[0][1],
+                  stone: game.board.positions[0][1].stone != null
+                      ? StoneWidget(
+                          canDrag: !game.isGameOver() &&
+                              game.whoseTurn == game.human &&
+                              game.human.stones
+                                  .contains(game.board.positions[0][1].stone),
+                          stone: game.board.positions[0][1].stone!,
+                          color: (game.playerWins(game.human) &&
+                                      game.human.stones.contains(
+                                          game.board.positions[0][1].stone)) ||
+                                  game.playerWins(game.computer) &&
+                                      game.computer.stones.contains(
+                                          game.board.positions[0][1].stone)
+                              ? Colors.green
+                              : game.human.stones.contains(
+                                      game.board.positions[0][1].stone)
+                                  ? Colors.blue
+                                  : Colors.red,
+                        )
+                      : null,
+                ),
+                PositionWidget(
+                  isValidMove: game.isValidMove,
+                  moveStone: moveStone,
+                  position: game.board.positions[0][2],
+                  stone: game.board.positions[0][2].stone != null
+                      ? StoneWidget(
+                          canDrag: !game.isGameOver() &&
+                              game.whoseTurn == game.human &&
+                              game.human.stones
+                                  .contains(game.board.positions[0][2].stone),
+                          stone: game.board.positions[0][2].stone!,
+                          color: (game.playerWins(game.human) &&
+                                      game.human.stones.contains(
+                                          game.board.positions[0][2].stone)) ||
+                                  game.playerWins(game.computer) &&
+                                      game.computer.stones.contains(
+                                          game.board.positions[0][2].stone)
+                              ? Colors.green
+                              : game.human.stones.contains(
+                                      game.board.positions[0][2].stone)
+                                  ? Colors.blue
+                                  : Colors.red,
+                        )
+                      : null,
+                ),
+              ],
             ),
-            PositionWidget(
-              isValidMove: game.isValidMove,
-              moveStone: moveStone,
-              position: game.board.positions[0][1],
-              stone: game.board.positions[0][1].stone != null
-                  ? StoneWidget(
-                      canDrag: game.whoseTurn == game.human &&
-                          game.human.stones
-                              .contains(game.board.positions[0][1].stone),
-                      stone: game.board.positions[0][1].stone!,
-                      color: game.isGameOver() &&
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                PositionWidget(
+                  isValidMove: game.isValidMove,
+                  moveStone: moveStone,
+                  position: game.board.positions[1][0],
+                  stone: game.board.positions[1][0].stone != null
+                      ? StoneWidget(
+                          canDrag: !game.isGameOver() &&
+                              game.whoseTurn == game.human &&
                               game.human.stones
-                                  .contains(game.board.positions[0][1].stone)
-                          ? Colors.green
-                          : game.human.stones
-                                  .contains(game.board.positions[0][1].stone)
-                              ? Colors.blue
-                              : Colors.red,
-                    )
-                  : null,
+                                  .contains(game.board.positions[1][0].stone),
+                          stone: game.board.positions[1][0].stone!,
+                          color: (game.playerWins(game.human) &&
+                                      game.human.stones.contains(
+                                          game.board.positions[1][0].stone)) ||
+                                  game.playerWins(game.computer) &&
+                                      game.computer.stones.contains(
+                                          game.board.positions[1][0].stone)
+                              ? Colors.green
+                              : game.human.stones.contains(
+                                      game.board.positions[1][0].stone)
+                                  ? Colors.blue
+                                  : Colors.red,
+                        )
+                      : null,
+                ),
+                PositionWidget(
+                  isValidMove: game.isValidMove,
+                  moveStone: moveStone,
+                  position: game.board.positions[1][1],
+                  stone: game.board.positions[1][1].stone != null
+                      ? StoneWidget(
+                          canDrag: !game.isGameOver() &&
+                              game.whoseTurn == game.human &&
+                              game.human.stones
+                                  .contains(game.board.positions[1][1].stone),
+                          stone: game.board.positions[1][1].stone!,
+                          color: (game.playerWins(game.human) &&
+                                      game.human.stones.contains(
+                                          game.board.positions[1][1].stone)) ||
+                                  game.playerWins(game.computer) &&
+                                      game.computer.stones.contains(
+                                          game.board.positions[1][1].stone)
+                              ? Colors.green
+                              : game.human.stones.contains(
+                                      game.board.positions[1][1].stone)
+                                  ? Colors.blue
+                                  : Colors.red,
+                        )
+                      : null,
+                ),
+                PositionWidget(
+                  isValidMove: game.isValidMove,
+                  moveStone: moveStone,
+                  position: game.board.positions[1][2],
+                  stone: game.board.positions[1][2].stone != null
+                      ? StoneWidget(
+                          canDrag: !game.isGameOver() &&
+                              game.whoseTurn == game.human &&
+                              game.human.stones
+                                  .contains(game.board.positions[1][2].stone),
+                          stone: game.board.positions[1][2].stone!,
+                          color: (game.playerWins(game.human) &&
+                                      game.human.stones.contains(
+                                          game.board.positions[1][2].stone)) ||
+                                  game.playerWins(game.computer) &&
+                                      game.computer.stones.contains(
+                                          game.board.positions[1][2].stone)
+                              ? Colors.green
+                              : game.human.stones.contains(
+                                      game.board.positions[1][2].stone)
+                                  ? Colors.blue
+                                  : Colors.red,
+                        )
+                      : null,
+                ),
+              ],
             ),
-            PositionWidget(
-              isValidMove: game.isValidMove,
-              moveStone: moveStone,
-              position: game.board.positions[0][2],
-              stone: game.board.positions[0][2].stone != null
-                  ? StoneWidget(
-                      canDrag: game.whoseTurn == game.human &&
-                          game.human.stones
-                              .contains(game.board.positions[0][2].stone),
-                      stone: game.board.positions[0][2].stone!,
-                      color: game.isGameOver() &&
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                PositionWidget(
+                  isValidMove: game.isValidMove,
+                  moveStone: moveStone,
+                  position: game.board.positions[2][0],
+                  stone: game.board.positions[2][0].stone != null
+                      ? StoneWidget(
+                          canDrag: !game.isGameOver() &&
+                              game.whoseTurn == game.human &&
                               game.human.stones
-                                  .contains(game.board.positions[0][2].stone)
-                          ? Colors.green
-                          : game.human.stones
-                                  .contains(game.board.positions[0][2].stone)
-                              ? Colors.blue
-                              : Colors.red,
-                    )
-                  : null,
-            ),
-          ],
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            PositionWidget(
-              isValidMove: game.isValidMove,
-              moveStone: moveStone,
-              position: game.board.positions[1][0],
-              stone: game.board.positions[1][0].stone != null
-                  ? StoneWidget(
-                      canDrag: game.whoseTurn == game.human &&
-                          game.human.stones
-                              .contains(game.board.positions[1][0].stone),
-                      stone: game.board.positions[1][0].stone!,
-                      color: game.isGameOver() &&
+                                  .contains(game.board.positions[2][0].stone),
+                          stone: game.board.positions[2][0].stone!,
+                          color: (game.playerWins(game.human) &&
+                                      game.human.stones.contains(
+                                          game.board.positions[2][0].stone)) ||
+                                  game.playerWins(game.computer) &&
+                                      game.computer.stones.contains(
+                                          game.board.positions[2][0].stone)
+                              ? Colors.green
+                              : game.human.stones.contains(
+                                      game.board.positions[2][0].stone)
+                                  ? Colors.blue
+                                  : Colors.red,
+                        )
+                      : null,
+                ),
+                PositionWidget(
+                  isValidMove: game.isValidMove,
+                  moveStone: moveStone,
+                  position: game.board.positions[2][1],
+                  stone: game.board.positions[2][1].stone != null
+                      ? StoneWidget(
+                          canDrag: !game.isGameOver() &&
+                              game.whoseTurn == game.human &&
                               game.human.stones
-                                  .contains(game.board.positions[1][0].stone)
-                          ? Colors.green
-                          : game.human.stones
-                                  .contains(game.board.positions[1][0].stone)
-                              ? Colors.blue
-                              : Colors.red,
-                    )
-                  : null,
-            ),
-            PositionWidget(
-              isValidMove: game.isValidMove,
-              moveStone: moveStone,
-              position: game.board.positions[1][1],
-              stone: game.board.positions[1][1].stone != null
-                  ? StoneWidget(
-                      canDrag: game.whoseTurn == game.human &&
-                          game.human.stones
-                              .contains(game.board.positions[1][1].stone),
-                      stone: game.board.positions[1][1].stone!,
-                      color: game.isGameOver() &&
+                                  .contains(game.board.positions[2][1].stone),
+                          stone: game.board.positions[2][1].stone!,
+                          color: (game.playerWins(game.human) &&
+                                      game.human.stones.contains(
+                                          game.board.positions[2][1].stone)) ||
+                                  game.playerWins(game.computer) &&
+                                      game.computer.stones.contains(
+                                          game.board.positions[2][1].stone)
+                              ? Colors.green
+                              : game.human.stones.contains(
+                                      game.board.positions[2][1].stone)
+                                  ? Colors.blue
+                                  : Colors.red,
+                        )
+                      : null,
+                ),
+                PositionWidget(
+                  isValidMove: game.isValidMove,
+                  moveStone: moveStone,
+                  position: game.board.positions[2][2],
+                  stone: game.board.positions[2][2].stone != null
+                      ? StoneWidget(
+                          canDrag: !game.isGameOver() &&
+                              game.whoseTurn == game.human &&
                               game.human.stones
-                                  .contains(game.board.positions[1][1].stone)
-                          ? Colors.green
-                          : game.human.stones
-                                  .contains(game.board.positions[1][1].stone)
-                              ? Colors.blue
-                              : Colors.red,
-                    )
-                  : null,
-            ),
-            PositionWidget(
-              isValidMove: game.isValidMove,
-              moveStone: moveStone,
-              position: game.board.positions[1][2],
-              stone: game.board.positions[1][2].stone != null
-                  ? StoneWidget(
-                      canDrag: game.whoseTurn == game.human &&
-                          game.human.stones
-                              .contains(game.board.positions[1][2].stone),
-                      stone: game.board.positions[1][2].stone!,
-                      color: game.isGameOver() &&
-                              game.human.stones
-                                  .contains(game.board.positions[1][2].stone)
-                          ? Colors.green
-                          : game.human.stones
-                                  .contains(game.board.positions[1][2].stone)
-                              ? Colors.blue
-                              : Colors.red,
-                    )
-                  : null,
-            ),
-          ],
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            PositionWidget(
-              isValidMove: game.isValidMove,
-              moveStone: moveStone,
-              position: game.board.positions[2][0],
-              stone: game.board.positions[2][0].stone != null
-                  ? StoneWidget(
-                      canDrag: game.whoseTurn == game.human &&
-                          game.human.stones
-                              .contains(game.board.positions[2][0].stone),
-                      stone: game.board.positions[2][0].stone!,
-                      color: game.isGameOver() &&
-                              game.human.stones
-                                  .contains(game.board.positions[2][0].stone)
-                          ? Colors.green
-                          : game.human.stones
-                                  .contains(game.board.positions[2][0].stone)
-                              ? Colors.blue
-                              : Colors.red,
-                    )
-                  : null,
-            ),
-            PositionWidget(
-              isValidMove: game.isValidMove,
-              moveStone: moveStone,
-              position: game.board.positions[2][1],
-              stone: game.board.positions[2][1].stone != null
-                  ? StoneWidget(
-                      canDrag: game.whoseTurn == game.human &&
-                          game.human.stones
-                              .contains(game.board.positions[2][1].stone),
-                      stone: game.board.positions[2][1].stone!,
-                      color: game.isGameOver() &&
-                              game.human.stones
-                                  .contains(game.board.positions[2][1].stone)
-                          ? Colors.green
-                          : game.human.stones
-                                  .contains(game.board.positions[2][1].stone)
-                              ? Colors.blue
-                              : Colors.red,
-                    )
-                  : null,
-            ),
-            PositionWidget(
-              isValidMove: game.isValidMove,
-              moveStone: moveStone,
-              position: game.board.positions[2][2],
-              stone: game.board.positions[2][2].stone != null
-                  ? StoneWidget(
-                      canDrag: game.whoseTurn == game.human &&
-                          game.human.stones
-                              .contains(game.board.positions[2][2].stone),
-                      stone: game.board.positions[2][2].stone!,
-                      color: game.isGameOver() &&
-                              game.human.stones
-                                  .contains(game.board.positions[2][2].stone)
-                          ? Colors.green
-                          : game.human.stones
-                                  .contains(game.board.positions[2][2].stone)
-                              ? Colors.blue
-                              : Colors.red,
-                    )
-                  : null,
+                                  .contains(game.board.positions[2][2].stone),
+                          stone: game.board.positions[2][2].stone!,
+                          color: (game.playerWins(game.human) &&
+                                      game.human.stones.contains(
+                                          game.board.positions[2][2].stone)) ||
+                                  game.playerWins(game.computer) &&
+                                      game.computer.stones.contains(
+                                          game.board.positions[2][2].stone)
+                              ? Colors.green
+                              : game.human.stones.contains(
+                                      game.board.positions[2][2].stone)
+                                  ? Colors.blue
+                                  : Colors.red,
+                        )
+                      : null,
+                ),
+              ],
             ),
           ],
         ),

@@ -8,11 +8,4 @@ class Position {
   int col;
 
   Position(this.adjacentPositions, this.row, this.col);
-
-  Position copyWith({
-    List<Position>? adjacentPositions,
-    Stone? stone,
-  }) {
-    return Position(adjacentPositions ?? this.adjacentPositions, row, col);
-  }
 }

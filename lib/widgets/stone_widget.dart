@@ -18,14 +18,22 @@ class StoneWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final widget = CircleAvatar(
       radius: 50,
-      backgroundColor: color,
+      backgroundColor: Colors.transparent,
+      child: CircleAvatar(
+        radius: 35,
+        backgroundColor: color,
+      ),
     );
     return canDrag
         ? Draggable<Stone>(
             data: stone,
             feedback: CircleAvatar(
               radius: 100,
-              backgroundColor: color,
+              backgroundColor: Colors.transparent,
+              child: CircleAvatar(
+                radius: 35,
+                backgroundColor: color,
+              ),
             ),
             childWhenDragging: const SizedBox(),
             child: widget,

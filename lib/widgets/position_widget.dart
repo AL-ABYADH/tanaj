@@ -23,10 +23,9 @@ class PositionWidget extends StatelessWidget {
     return DragTarget<Stone>(
       onAcceptWithDetails: (details) => moveStone(details.data, position),
       onWillAcceptWithDetails: (details) => isValidMove(details.data, position),
-      builder: (context, candidateItems, rejectedItems) => Container(
+      builder: (context, candidateItems, rejectedItems) => SizedBox(
         height: 200,
         width: 200,
-        color: Colors.amber,
         child: stone,
       ),
     );
