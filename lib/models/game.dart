@@ -31,6 +31,19 @@ class Game {
     moves++;
   }
 
+  List<MapEntry<Stone, Position>> get allMoves {
+    final moves = <MapEntry<Stone, Position>>[];
+    for (var stone in whoseTurn.stones) {
+      for (var position in stone.position.adjacentPositions) {
+        if (isValidMove(stone, position)) {
+          moves.add(MapEntry(stone, position));
+        }
+      }
+    }
+
+    return moves;
+  }
+
   bool isValidMove(Stone stone, Position position) {
     final originalStone = [...human.stones, ...computer.stones]
         .firstWhere((element) => element.id == stone.id);
@@ -110,27 +123,16 @@ class Game {
     int bestScore = -1000;
     Map<Stone, Position>? currentBest;
 
-    // Iterate through all possible moves first
-    final allMoves = <MapEntry<Stone, Position>>[];
-    for (var stone in gameState.whoseTurn.stones) {
-      for (var position in stone.position.adjacentPositions) {
-        if (gameState.isValidMove(stone, position)) {
-          allMoves.add(MapEntry(stone, position));
-        }
-      }
-    }
-
     // Sort moves by heuristic (simple center-first ordering)
-    allMoves.sort((a, b) {
-      final aIsCenter = a.value == gameState.board.positions[1][1];
-      final bIsCenter = b.value == gameState.board.positions[1][1];
-      if (aIsCenter && !bIsCenter) return -1;
-      if (!aIsCenter && bIsCenter) return 1;
-      return 0;
-    });
+    // gameState.allMoves.sort((a, b) {
+    //   final aIsCenter = a.value == gameState.board.positions[1][1];
+    //   final bIsCenter = b.value == gameState.board.positions[1][1];
+    //   if (aIsCenter && !bIsCenter) return -1;
+    //   if (!aIsCenter && bIsCenter) return 1;
+    //   return 0;
+    // });
 
-    // Evaluate sorted moves
-    for (final move in allMoves) {
+    for (final move in gameState.allMoves) {
       final stone = move.key;
       final position = move.value;
 
@@ -148,7 +150,10 @@ class Game {
   }
 
   int minimax(Game gameState, bool maximize, int alpha, int beta, int depth) {
-    if (depth == 0 || gameState.isGameOver()) {
+    if (gameState.playerWins(gameState.computer)) return 1000;
+    if (gameState.playerWins(gameState.human)) return -1000;
+
+    if (depth == 0) {
       return evaluate(gameState);
     }
 
@@ -162,40 +167,38 @@ class Game {
   int maximizer(Game gameState, int alpha, int beta, int depth) {
     int value = -1000;
 
-    outerLoop:
-    for (final stone in gameState.whoseTurn.stones) {
-      for (final position in stone.position.adjacentPositions) {
-        if (!gameState.isValidMove(stone, position)) continue;
+    for (final move in gameState.allMoves) {
+      final stone = move.key;
+      final position = move.value;
 
-        final prevPosition = stone.position;
-        gameState.movePlayerStone(stone, position);
-        value = max(value, minimax(gameState, false, alpha, beta, depth - 1));
-        gameState.movePlayerStone(stone, prevPosition);
+      final prevPosition = stone.position;
+      gameState.movePlayerStone(stone, position);
+      value = max(value, minimax(gameState, false, alpha, beta, depth - 1));
+      gameState.movePlayerStone(stone, prevPosition);
 
-        alpha = max(alpha, value);
-        if (value >= beta) break outerLoop;
-      }
+      alpha = max(alpha, value);
+      if (value >= beta) break;
     }
+
     return value;
   }
 
   int minimizer(Game gameState, int alpha, int beta, int depth) {
     int value = 1000;
 
-    outerLoop:
-    for (final stone in gameState.whoseTurn.stones) {
-      for (final position in stone.position.adjacentPositions) {
-        if (!gameState.isValidMove(stone, position)) continue;
+    for (final move in gameState.allMoves) {
+      final stone = move.key;
+      final position = move.value;
 
-        final prevPosition = stone.position;
-        gameState.movePlayerStone(stone, position);
-        value = min(value, minimax(gameState, true, alpha, beta, depth - 1));
-        gameState.movePlayerStone(stone, prevPosition);
+      final prevPosition = stone.position;
+      gameState.movePlayerStone(stone, position);
+      value = min(value, minimax(gameState, true, alpha, beta, depth - 1));
+      gameState.movePlayerStone(stone, prevPosition);
 
-        beta = min(beta, value);
-        if (value <= alpha) break outerLoop;
-      }
+      beta = min(beta, value);
+      if (value <= alpha) break;
     }
+
     return value;
   }
 
@@ -285,7 +288,8 @@ class Game {
 
     int mobilityScore = computerMobility - humanMobility;
 
-    // Total evaluation score
-    return lineScore + centerScore + mobilityScore;
+    final total = lineScore + centerScore + mobilityScore;
+
+    return total;
   }
 }
