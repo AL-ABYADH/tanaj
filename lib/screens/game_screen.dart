@@ -37,7 +37,7 @@ class _GameScreenState extends State<GameScreen> {
               Stone(5, board.positions[0][1]),
               Stone(6, board.positions[0][2]),
             ])),
-        humanStarts: false);
+        humanStarts: true);
     game.board.positions[0][0].stone = game.computer.stones[0];
     game.board.positions[0][1].stone = game.computer.stones[1];
     game.board.positions[0][2].stone = game.computer.stones[2];

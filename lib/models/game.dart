@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import '../exceptions/invalid_move_exception.dart';
-import '../exceptions/move_not_found_exception.dart';
 import 'board.dart';
 import 'player.dart';
 import 'position.dart';
@@ -112,16 +111,19 @@ class Game {
       moves: moves,
     );
 
-    final Map<Stone, Position>? bestMove = findBestMove(gameState, 8);
-
-    if (bestMove == null) throw MoveNotFoundException();
+    final Map<Stone, Position> bestMove = findBestMove(gameState, 8);
 
     movePlayerStone(bestMove.keys.first, bestMove.values.first);
   }
 
-  Map<Stone, Position>? findBestMove(Game gameState, int depth) {
+  Map<Stone, Position> findBestMove(Game gameState, int depth) {
     int bestScore = -1000;
-    Map<Stone, Position>? currentBest;
+
+    // Set the current best move to a random move form the available moves
+    // If no better move was found, the move will be random
+    final randomMove =
+        gameState.allMoves[Random().nextInt(gameState.allMoves.length)];
+    Map<Stone, Position> currentBest = {randomMove.key: randomMove.value};
 
     // Sort moves by heuristic (simple center-first ordering)
     // gameState.allMoves.sort((a, b) {
@@ -155,6 +157,7 @@ class Game {
 
     if (depth == 0) {
       return evaluate(gameState);
+      // return -1;
     }
 
     if (maximize) {
@@ -231,35 +234,29 @@ class Game {
 
     // Calculate line potential scores
     for (final line in allLines) {
-      int cCount = 0;
-      int hCount = 0;
+      int computerStonesCount = 0;
+      int humanStonesCount = 0;
 
       for (final pos in line) {
         final stone = pos.stone;
         if (stone != null) {
           if (computerStones.any((s) => s.id == stone.id)) {
-            cCount++;
+            computerStonesCount++;
           } else if (humanStones.any((s) => s.id == stone.id)) {
-            hCount++;
+            humanStonesCount++;
           }
         }
       }
 
-      if (hCount == 0 && cCount > 0) {
-        // Computer has stones in this line
-        if (line == row3) {
-          // Computer's target row
-          lineScore += cCount * 100;
-        } else {
-          lineScore += cCount * 50;
+      if (humanStonesCount == 0 && computerStonesCount > 0) {
+        // Only computer has stones in this line
+        if (line != row1) {
+          lineScore += computerStonesCount * 100;
         }
-      } else if (cCount == 0 && hCount > 0) {
-        // Human has stones in this line
-        if (line == row1) {
-          // Human's target row
-          lineScore -= hCount * 100;
-        } else {
-          lineScore -= hCount * 50;
+      } else if (computerStonesCount == 0 && humanStonesCount > 0) {
+        // Only human has stones in this line
+        if (line != row3) {
+          lineScore -= humanStonesCount * 100;
         }
       }
     }
